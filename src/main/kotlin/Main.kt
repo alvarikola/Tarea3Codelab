@@ -1,10 +1,14 @@
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,21 +54,25 @@ fun Pantalla2(modifier: Modifier = Modifier) {
         "No se que más poner",
         "La mejor contraseña es 1234"
     )
-    Column(
+    val names: List<String> = List(1000) { "$it" }
+    LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        textos.forEach{ texto ->
+        items(names) { name ->
             Row(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
-                Fila(texto, modifier = Modifier)
+                Fila(name, modifier = Modifier)
             }
         }
     }
 }
 
+
 @Composable
 fun Fila(texto:String, modifier: Modifier = Modifier){
-    var expand = remember { mutableStateOf(false) }
-    val expandPadding = if (expand.value) 70.dp else 0.dp
+    var expand = rememberSaveable { mutableStateOf(false) }
+    val expandPadding by animateDpAsState(
+        if (expand.value) 70.dp else 0.dp
+    )
     Row (modifier = Modifier.background(Color.Red).fillMaxWidth().padding(15.dp, bottom = expandPadding), verticalAlignment = Alignment.CenterVertically){
         Text(
             text = texto,
