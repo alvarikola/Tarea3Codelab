@@ -1,3 +1,4 @@
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -6,9 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -75,24 +78,45 @@ fun Fila(texto:String, modifier: Modifier = Modifier){
     var expand = rememberSaveable { mutableStateOf(false) }
     val expandPadding by animateDpAsState(
         if (expand.value) 70.dp else 0.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
     )
     val currentPadding = expandPadding.coerceAtLeast(0.dp)
-    Row (modifier = Modifier.background(Color.Red).fillMaxWidth().padding(15.dp, bottom = currentPadding), verticalAlignment = Alignment.CenterVertically){
+    Row (modifier = Modifier
+        .background(Color.Red)
+        .fillMaxWidth()
+        .padding(15.dp)
+        .animateContentSize (
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
         Text(
             text = texto,
             color = Color.White,
             modifier = Modifier.weight(1f)
         )
-        Button(
+        IconButton(
             onClick = { expand.value = !expand.value },
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(bottom = currentPadding)
         ) {
-            Text(if (expand.value) "Show less" else "Show more")
+            Icon(
+                imageVector = if (expand.value) Filled.KeyboardArrowDown else Filled.KeyboardArrowUp,
+                contentDescription =
+                    if (expand.value) {
+                        "Mostar menos"
+                    } else {
+                        "Mostrar más"
+                    }
+            )
         }
+//        Button(
+//            onClick = { expand.value = !expand.value },
+//            modifier = Modifier.padding(10.dp)
+//        ) {
+//            Text(if (expand.value) "Show less" else "Show more")
+//        }
     }
 }
 
