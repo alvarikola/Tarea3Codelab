@@ -80,7 +80,7 @@ fun Fila(texto:String, modifier: Modifier = Modifier){
         if (expand.value) 70.dp else 0.dp,
     )
     val currentPadding = expandPadding.coerceAtLeast(0.dp)
-    Row (modifier = Modifier
+    Column (modifier = Modifier
         .background(Color.Red)
         .fillMaxWidth()
         .padding(15.dp)
@@ -90,27 +90,38 @@ fun Fila(texto:String, modifier: Modifier = Modifier){
                 stiffness = Spring.StiffnessLow
             )
         ),
-        verticalAlignment = Alignment.CenterVertically
+//        verticalAlignment = Alignment.CenterVertically
     ){
-        Text(
-            text = texto,
-            color = Color.White,
-            modifier = Modifier.weight(1f)
-        )
-        IconButton(
-            onClick = { expand.value = !expand.value },
-            modifier = Modifier.padding(bottom = currentPadding)
-        ) {
-            Icon(
-                imageVector = if (expand.value) Filled.KeyboardArrowDown else Filled.KeyboardArrowUp,
-                contentDescription =
+        Row {
+            Text(
+                text = texto,
+                color = Color.White,
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(
+                onClick = { expand.value = !expand.value },
+                modifier = Modifier.padding(bottom = currentPadding)
+            ) {
+                Icon(
+                    imageVector = if (expand.value) Filled.KeyboardArrowDown else Filled.KeyboardArrowUp,
+                    contentDescription =
                     if (expand.value) {
                         "Mostar menos"
                     } else {
                         "Mostrar más"
                     }
-            )
+                )
+            }
         }
+        Row {
+            if (expand.value) {
+                Text(
+                    text = ("Composem ipsum color sit lazy, " +
+                            "padding theme elit, sed do bouncy. ").repeat(4),
+                )
+            }
+        }
+
 //        Button(
 //            onClick = { expand.value = !expand.value },
 //            modifier = Modifier.padding(10.dp)
