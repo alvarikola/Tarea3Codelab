@@ -1,4 +1,6 @@
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -71,9 +74,14 @@ fun Pantalla2(modifier: Modifier = Modifier) {
 fun Fila(texto:String, modifier: Modifier = Modifier){
     var expand = rememberSaveable { mutableStateOf(false) }
     val expandPadding by animateDpAsState(
-        if (expand.value) 70.dp else 0.dp
+        if (expand.value) 70.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
     )
-    Row (modifier = Modifier.background(Color.Red).fillMaxWidth().padding(15.dp, bottom = expandPadding), verticalAlignment = Alignment.CenterVertically){
+    val currentPadding = expandPadding.coerceAtLeast(0.dp)
+    Row (modifier = Modifier.background(Color.Red).fillMaxWidth().padding(15.dp, bottom = currentPadding), verticalAlignment = Alignment.CenterVertically){
         Text(
             text = texto,
             color = Color.White,
